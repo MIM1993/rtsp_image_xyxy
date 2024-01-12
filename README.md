@@ -5,3 +5,5 @@
 2、使用labelImg项目打开图片，画出所需要区域的坐标，这个方法暂时只能获取矩形区域的坐标，不能支持获取多边形各个点坐标
 3、调用read_yolov5_label_file_draw_img函数可以查看坐标映射在图像上的区域对不对
 4、read_yolov5_label_file_to_xyxy函数则可以将yolov5标注坐标转换成图像坐标系下的[x1,y1,x2,y2]坐标
+
+ps：有大佬写了个脚本，正在整理
