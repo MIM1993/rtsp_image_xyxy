@@ -1,5 +1,7 @@
 import os
 import cv2
+import json
+import numpy as np
 
 
 # 读取yolov5标注文件,将标注信息转换成图片上的坐标
@@ -83,6 +85,44 @@ def get_img_with_rtsp(rtsp_path, count=10, save_path="img"):
     cap.retrieve()
 
 
+def read_rtsp(rtsp_path):
+    cap = cv2.VideoCapture(rtsp_path)
+    while True:
+        _, frame = cap.read()
+        cv2.imshow('frame', frame)
+        cv2.waitKey(1)
+
+    cap.retrieve()
+    cv2.destroyAllWindows()
+
+
+# 读取文件画图
+def read_point_file_draw_img(path):
+    f = open(path, 'r')
+    text = f.read()
+    point_list = json.loads(text)
+    # for id, xyxy in enumerate(point_list):
+    #     print(type(xyxy[0][0]))
+
+    return point_list
+
+
+if __name__ == "__main__":
+    point_list = read_point_file_draw_img("point.txt")
+    rtsp_path = "rtsp://127.0.0.1:8554/test"
+
+    cap = cv2.VideoCapture(rtsp_path)
+    while True:
+        ret, frame = cap.read()
+        ptss = []
+        for id, xyxy in enumerate(point_list):
+            print(xyxy)
+            pts = np.array(xyxy, np.int32)
+            ptss.append(pts)
+        cv2.polylines(frame, ptss, isClosed=True, color=(0, 255, 0), thickness=2)
+        cv2.imshow('frame', frame)
+        cv2.waitKey(1)
+
 if __name__ == "__main1__":
     import cv2
 
@@ -112,7 +152,10 @@ if __name__ == "__main2__":
     read_yolov5_label_file_draw_img("rtsp://192.168.180.114:8554/nba",
                                     "frame.txt")
 
-if __name__ == "__main__":
+if __name__ == "__main3__":
     import cv2
 
-    get_img_with_rtsp("rtsp://192.168.180.114:8554/nba", count=10, save_path="img")
+    get_img_with_rtsp("rtsp://127.0.0.1:8554/test", count=10, save_path="img")
+
+if __name__ == "__main4__":
+    read_rtsp("rtsp://127.0.0.1:8554/test")
