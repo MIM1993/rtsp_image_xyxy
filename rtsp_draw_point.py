@@ -66,6 +66,7 @@ class display():
             if ok:
                 if self.isframe():
                     frame = cv2.transpose(frame)
+                    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
                     pygame.surfarray.blit_array(self.screen, frame)
                     if len(self.total_points) > 0:
                         for poly in self.total_points:
