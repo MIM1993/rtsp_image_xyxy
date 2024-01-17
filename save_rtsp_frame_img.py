@@ -3,7 +3,6 @@ import cv2
 import json
 import numpy as np
 
-
 # 读取yolov5标注文件,将标注信息转换成图片上的坐标
 def read_yolov5_label_file_to_xyxy(file, img_width, img_height):
     f = open(file, 'r')
@@ -105,6 +104,27 @@ def read_point_file_draw_img(path):
     #     print(type(xyxy[0][0]))
 
     return point_list
+
+
+class Colors:
+    # Ultralytics color palette https://ultralytics.com/
+    def __init__(self):
+        # hex = matplotlib.colors.TABLEAU_COLORS.values()
+        hexs = ('FF3838', 'FF9D97', 'FF701F', 'FFB21D', 'CFD231', '48F90A', '92CC17', '3DDB86', '1A9334', '00D4BB',
+                '2C99A8', '00C2FF', '344593', '6473FF', '0018EC', '8438FF', '520085', 'CB38FF', 'FF95C8', 'FF37C7',
+                "369F75")
+        self.palette = [self.hex2rgb(f'#{c}') for c in hexs]
+        self.n = len(self.palette)
+
+    def __call__(self, i, bgr=False):
+        c = self.palette[int(i) % self.n]
+        return (c[2], c[1], c[0]) if bgr else c
+
+    @staticmethod
+    def hex2rgb(h):  # rgb order (PIL)
+        return tuple(int(h[1 + i:1 + i + 2], 16) for i in (0, 2, 4))
+
+colors = Colors()  # create instance for 'from utils.plots import colors'
 
 # 画框类
 class Annotator:
@@ -210,3 +230,5 @@ if __name__ == "__main3__":
 
 if __name__ == "__main4__":
     read_rtsp("rtsp://127.0.0.1:8554/test")
+    # example
+    # annotator.box_label(d["bbox"], "", color=colors(20, True)) 
